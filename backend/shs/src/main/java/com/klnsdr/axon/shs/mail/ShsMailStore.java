@@ -80,4 +80,18 @@ public class ShsMailStore {
         );
         return mail;
     }
+
+    public Mail getNewEnrollMailForTeamTemplate() {
+        final Mail mail = new Mail();
+        mail.setFrom(from);
+        mail.setSubject("Neue Anmeldung Schüler helfen Schülern");
+        mail.setBody(
+                "Liebes ShS-Team," +
+                        NL +
+                        "auf der Website ist eine Anfrage von <<NAME>> <<SURENAME>> (Klasse <<GRADE>>) eingegangen." +
+                        NL +
+                        "ShS-Website"
+        );
+        return mail;
+    }
 }

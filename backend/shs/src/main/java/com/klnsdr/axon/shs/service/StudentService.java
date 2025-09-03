@@ -14,6 +14,7 @@ import com.klnsdr.axon.shs.mail.ShsMailStore;
 import com.klnsdr.axon.shs.service.legacy.GroupService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.util.Pair;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,9 @@ public class StudentService {
     private final ShsMailStore shsMailStore;
     private final ShsMailRenderer shsMailRenderer;
     private final AtomicBoolean running = new AtomicBoolean(false);
+
+    @Value("${app.teamMail}")
+    private String teamMail;
 
     public StudentService(
             StudentRepository studentRepository,
@@ -69,6 +73,7 @@ public class StudentService {
         final EnrolledStudentEntity entity = map(student);
         final Student enrolledStudent = mapToStudent(studentRepository.save(entity));
         sendConfirmationMail(enrolledStudent);
+        sendConfirmationMailTeam(enrolledStudent);
         return enrolledStudent;
     }
 
@@ -79,6 +84,19 @@ public class StudentService {
                 confirmationMail,
                 Map.of(
                         "NAME", enrolled.getName() + " " + enrolled.getSureName()
+                )
+        ));
+    }
+
+    private void sendConfirmationMailTeam(Student enrolled) {
+        final Mail confirmationMail = shsMailStore.getNewEnrollMailForTeamTemplate();
+        confirmationMail.setTo(teamMail);
+        mailService.sendEmail(shsMailRenderer.renderMail(
+                confirmationMail,
+                Map.of(
+                        "NAME", enrolled.getName(),
+                        "SURENAME", enrolled.getSureName(),
+                        "GRADE", Integer.toString(enrolled.getGrade())
                 )
         ));
     }
@@ -149,8 +167,8 @@ public class StudentService {
         mailService.sendEmail(shsMailRenderer.renderMail(
                 mailTeacher,
                 Map.of(
-                        "NAME", group.getTeacher().getName() + " " + group.getTeacher().getSureName(),
-                        "NAME_STUDENT", group.getStudents().stream().map(s -> s.getName() + " " + s.getSureName()).reduce((a, b) -> a + ", " + b).orElse(""),
+                        "NAME", group.getTeacher().getName(),
+                        "NAME_STUDENT", group.getStudents().stream().map(LockedEnrolledStudentEntity::getName).reduce((a, b) -> a + ", " + b).orElse(""),
                         "GRADE", Integer.toString(group.getTeacher().getGrade()),
                         "SUBJECT", group.getSubject(),
                         "MAIL", group.getStudents().stream().map(LockedEnrolledStudentEntity::getMail).reduce((a, b) -> a + ", " + b).orElse(""),
@@ -164,7 +182,7 @@ public class StudentService {
             mailService.sendEmail(shsMailRenderer.renderMail(
                     mailStudent,
                     Map.of(
-                            "NAME", student.getName() + " " + student.getSureName(),
+                            "NAME", student.getName(),
                             "NAME_TEACHER", group.getTeacher().getName() + " " + group.getTeacher().getSureName(),
                             "GRADE", Integer.toString(group.getTeacher().getGrade()),
                             "SUBJECT", group.getSubject(),

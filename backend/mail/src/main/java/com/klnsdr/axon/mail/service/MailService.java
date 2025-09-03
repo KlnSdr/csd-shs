@@ -37,9 +37,6 @@ public class MailService {
 
             try {
                 LOGGER.debug("sending email to {}", mail.getTo());
-                LOGGER.debug("subject: {}", mail.getSubject());
-                LOGGER.debug("body: {}", mail.getBody());
-
                 final SimpleMailMessage message = new SimpleMailMessage();
                 message.setFrom(mail.getFrom());
                 message.setTo(mail.getTo());
