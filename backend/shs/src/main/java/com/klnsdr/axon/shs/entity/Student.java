@@ -14,4 +14,5 @@ public class Student {
     private int grade;
     private boolean isGroup;
     private String phoneNumber;
+    private boolean isGem;
 }

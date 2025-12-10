@@ -40,4 +40,7 @@ public class EnrolledStudentEntity {
 
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    @Column(name = "is_gem")
+    private boolean isGem;
 }

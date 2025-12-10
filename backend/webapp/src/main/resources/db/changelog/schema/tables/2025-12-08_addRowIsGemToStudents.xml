@@ -2,6 +2,12 @@
 <databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
-    <include file="/db/changelog/schema/tables/2025-08-10_createBaseTables.xml"/>
-    <include file="/db/changelog/schema/tables/2025-12-08_addRowIsGemToStudents.xml"/>
+    <changeSet author="KlnSdr" id="2025-12-08_addRowIsGemToStudents">
+        <addColumn tableName="enrolled_students">
+            <column name="is_gem" type="BIT"/>
+        </addColumn>
+        <addColumn tableName="locked_enrolled_students">
+            <column name="is_gem" type="BIT"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

@@ -185,6 +185,7 @@ function startScript() {
                     );
                 }
 
+                // @ts-ignore
                 statusTimer = setInterval(checkStatus, 1000);
             })
             .catch((e: any) => {

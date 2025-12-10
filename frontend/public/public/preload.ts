@@ -69,10 +69,6 @@ function preload() {
                                 <a href="https://christophorusschulen-sachsen-anhalt.cjd.de/de/cjd-christophorusschulen-droyssig"
                                     >Webseite unserer Schule</a
                                 ><br />
-                                <a
-                                    href="https://www.instagram.com/kantrat_kantgym/"
-                                    >Instagram</a
-                                ><br />
                             </div>
                         </li>
                     </ul>

@@ -144,7 +144,8 @@ public class StudentServiceTest {
     void runAnalysisInternal_successfulPath() {
         LockedEnrolledStudentEntity student = mock(LockedEnrolledStudentEntity.class);
         when(student.asJson()).thenReturn("{\"id\":1}");
-        when(lockedStudentRepository.findAll()).thenReturn(List.of(student));
+        when(lockedStudentRepository.findByIsGemIsFalse()).thenReturn(List.of(student));
+        when(lockedStudentRepository.findByIsGemIsTrue()).thenReturn(List.of());
         when(analysisScriptRunner.runAnalysisScript(anyString()))
                 .thenReturn(Pair.of(true, "{\"einzel\":[],\"gruppe\":[],\"ohne\":[]}"));
 
@@ -156,7 +157,8 @@ public class StudentServiceTest {
 
     @Test
     void runAnalysisInternal_failsWhenNoStudents() {
-        when(lockedStudentRepository.findAll()).thenReturn(List.of());
+        when(lockedStudentRepository.findByIsGemIsTrue()).thenReturn(List.of());
+        when(lockedStudentRepository.findByIsGemIsFalse()).thenReturn(List.of());
 
         boolean result = invokeRunAnalysisInternal();
 
@@ -168,7 +170,8 @@ public class StudentServiceTest {
     void runAnalysisInternal_failsWhenScriptReturnsError() {
         LockedEnrolledStudentEntity student = mock(LockedEnrolledStudentEntity.class);
         when(student.asJson()).thenReturn("{\"id\":1}");
-        when(lockedStudentRepository.findAll()).thenReturn(List.of(student));
+        when(lockedStudentRepository.findByIsGemIsTrue()).thenReturn(List.of(student));
+        when(lockedStudentRepository.findByIsGemIsFalse()).thenReturn(List.of());
         when(analysisScriptRunner.runAnalysisScript(anyString()))
                 .thenReturn(Pair.of(false, "Script error"));
 

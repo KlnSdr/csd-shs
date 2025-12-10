@@ -43,6 +43,9 @@ public class LockedEnrolledStudentEntity {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Column(name = "is_gem")
+    private boolean isGem;
+
     private static final String QUOTE = "\"";
     private static final String COMMA = ",";
     private static final String COLON = ":";

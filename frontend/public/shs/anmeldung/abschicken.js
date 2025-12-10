@@ -6,7 +6,8 @@ let handy;
 let klasse;
 let fach;
 let klassenstufen;
-let anzahl;
+let isGroup = false;
+let isGem = false;
 let warnung1 = [];
 let warnung2 = [];
 let warnung3 = [];
@@ -146,12 +147,7 @@ window.addEventListener('load', () => {
             warnung5.toString();
             warnungen = warnung1 + warnung2 + warnung3 + warnung4 + warnung5;
 
-            if (document.getElementById('one1').checked == false) {
-                anzahl = '1';
-            } else {
-                anzahl = '0';
-            }
-
+            isGroup = document.getElementById('one1').checked == false;
             if (warnungen.length > 0) {
                 //wenn es warnungen gibt wird das dokument nicht abgeschickt
                 //alert("Einige der angegebenen Daten scheinen nicht zu stimmen");
@@ -332,11 +328,7 @@ window.addEventListener('load', () => {
                 warnungen =
                     warnung1 + warnung2 + warnung3 + warnung4 + warnung5;
 
-                if (document.getElementById('one1').checked == false) {
-                    anzahl = '1';
-                } else {
-                    anzahl = '0';
-                }
+                isGroup = document.getElementById('one1').checked == false;
 
                 if (warnungen.length > 0) {
                     //wenn es warnungen gibt wird das dokument nicht abgeschickt
@@ -504,13 +496,7 @@ window.addEventListener('load', () => {
                     warnung11 = [];
                 }
 
-                if (document.getElementById('one2').checked == true) {
-                    anzahl = '0';
-                } else if (
-                    document.getElementById('multiple2').checked == true
-                ) {
-                    anzahl = '0';
-                }
+                isGroup = document.getElementById('one2').checked == false;
 
                 warnung11.toString();
                 warnung12.toString();
@@ -547,8 +533,9 @@ function doEnrollStudent() {
       mail: mail.value,
       subject: fach.innerText,
       grade: parseInt(klasse.innerText),
-      group: anzahl == 0,
-      phoneNumber: handy.value
+      group: isGroup,
+      phoneNumber: handy.value,
+      gem: document.getElementById("isGemStud").checked
     };
   console.log(data);
   fetch(`${backend}/api/shs/enroll/student`, {
@@ -578,9 +565,10 @@ function doEnrollTeacher() {
       mail: mail.value,
       subject: fach.innerText,
       grade: parseInt(klasse.innerText),
-      group: anzahl == 0,
+      group: isGroup,
       phoneNumber: handy.value,
-      targetGrade : parseInt(klassenstufen.innerText)
+      targetGrade : parseInt(klassenstufen.innerText),
+      gem: document.getElementById("isGemJT").checked
     };
   console.log(data);
   fetch(`${backend}/api/shs/enroll/teacher`, {
