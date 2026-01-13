@@ -7,7 +7,6 @@ let klasse;
 let fach;
 let klassenstufen;
 let isGroup = false;
-let isGem = false;
 let warnung1 = [];
 let warnung2 = [];
 let warnung3 = [];
@@ -534,8 +533,7 @@ function doEnrollStudent() {
       subject: fach.innerText,
       grade: parseInt(klasse.innerText),
       group: isGroup,
-      phoneNumber: handy.value,
-      gem: document.getElementById("isGemStud").checked
+      phoneNumber: handy.value
     };
   console.log(data);
   fetch(`${backend}/api/shs/enroll/student`, {
@@ -567,8 +565,7 @@ function doEnrollTeacher() {
       grade: parseInt(klasse.innerText),
       group: isGroup,
       phoneNumber: handy.value,
-      targetGrade : parseInt(klassenstufen.innerText),
-      gem: document.getElementById("isGemJT").checked
+      targetGrade : parseInt(klassenstufen.innerText)
     };
   console.log(data);
   fetch(`${backend}/api/shs/enroll/teacher`, {

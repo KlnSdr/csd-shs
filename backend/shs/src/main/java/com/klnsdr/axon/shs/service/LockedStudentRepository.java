@@ -20,6 +20,4 @@ public interface LockedStudentRepository extends JpaRepository<LockedEnrolledStu
 
     List<LockedEnrolledStudentEntity> findBySubjectAndIsTeacherIsFalse(String subject);
     List<LockedEnrolledStudentEntity> findBySubjectAndIsTeacherIsTrue(String subject);
-    List<LockedEnrolledStudentEntity> findByIsGemIsFalse();
-    List<LockedEnrolledStudentEntity> findByIsGemIsTrue();
 }

@@ -14,7 +14,6 @@ public class StudentDTO {
     private int grade;
     private boolean isGroup;
     private String phoneNumber;
-    private boolean isGem;
 
     public Student toStudent() {
         final Student student = new Student();
@@ -25,7 +24,6 @@ public class StudentDTO {
         student.setGrade(this.getGrade());
         student.setGroup(this.isGroup());
         student.setPhoneNumber(this.getPhoneNumber());
-        student.setGem(this.isGem());
         return student;
     }
 }

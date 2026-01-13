@@ -3,5 +3,4 @@
                    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
     <include file="/db/changelog/schema/tables/2025-08-10_createBaseTables.xml"/>
-    <include file="/db/changelog/schema/tables/2025-12-08_addRowIsGemToStudents.xml"/>
 </databaseChangeLog>

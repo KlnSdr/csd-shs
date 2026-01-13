@@ -240,7 +240,7 @@ public class StudentService {
 
     public boolean resetData() {
         try {
-//            studentRepository.deleteAll();
+            studentRepository.deleteAll();
             groupService.deleteAllGroupsAndStudents();
 
             copyStudentDataHelper.clearLockedStudentsTable();
@@ -292,46 +292,29 @@ public class StudentService {
             return false;
         }
 
-        final List<LockedEnrolledStudentEntity> allEnrolledStudentsGym = lockedStudentRepository.findByIsGemIsFalse();
-        final String studentsAsParamGym = "[" + allEnrolledStudentsGym.stream()
-                .map(LockedEnrolledStudentEntity::asJson)
-                .reduce((a, b) -> a + "," + b)
-                .orElse("") + "]";
-        final List<LockedEnrolledStudentEntity> allEnrolledStudentsGem = lockedStudentRepository.findByIsGemIsTrue();
-        final String studentsAsParamGem = "[" + allEnrolledStudentsGem.stream()
+        final List<LockedEnrolledStudentEntity> allEnrolledStudents = lockedStudentRepository.findAll();
+        final String studentsAsParam = "[" + allEnrolledStudents.stream()
                 .map(LockedEnrolledStudentEntity::asJson)
                 .reduce((a, b) -> a + "," + b)
                 .orElse("") + "]";
 
-        final boolean runGymAnalysis = studentsAsParamGym.equals("[]");
-        final boolean runGemAnalysis = studentsAsParamGem.equals("[]");
-
-        if (runGymAnalysis && runGemAnalysis) {
+        if (studentsAsParam.equals("[]")) {
             logger.warn("No students found for analysis");
             writeAnalysisStatusToDatabase(false, "No students found for analysis");
             running.set(false);
             return false;
         }
 
-        final Pair<Boolean, String> resultGym = analysisScriptRunner.runAnalysisScript(studentsAsParamGym);
-        final Pair<Boolean, String> resultGem = analysisScriptRunner.runAnalysisScript(studentsAsParamGem);
-        if (!resultGym.getFirst()) {
-            logger.error("Analysis script failed: {}", resultGym.getSecond());
-            writeAnalysisStatusToDatabase(false, resultGym.getSecond().length() < 20 ? resultGym.getSecond() : "Ein Fehler beim Ausführen des Skripts ist aufgetreten");
-            running.set(false);
-            return false;
-        }
-
-        if (!resultGem.getFirst()) {
-            logger.error("Analysis script failed: {}", resultGem.getSecond());
-            writeAnalysisStatusToDatabase(false, resultGem.getSecond().length() < 20 ? resultGem.getSecond() : "Ein Fehler beim Ausführen des Skripts ist aufgetreten");
+        final Pair<Boolean, String> result = analysisScriptRunner.runAnalysisScript(studentsAsParam);
+        if (!result.getFirst()) {
+            logger.error("Analysis script failed: {}", result.getSecond());
+            writeAnalysisStatusToDatabase(false, result.getSecond().length() < 20 ? result.getSecond() : "Ein Fehler beim Ausführen des Skripts ist aufgetreten");
             running.set(false);
             return false;
         }
 
         try {
-            parseAndStoreScriptOutput(resultGym.getSecond());
-            parseAndStoreScriptOutput(resultGem.getSecond());
+            parseAndStoreScriptOutput(result.getSecond());
         } catch (Exception e) {
             logger.error("Failed to parse and store script output", e);
             writeAnalysisStatusToDatabase(false, "Failed to parse and store script output: " + e.getMessage());
@@ -364,7 +347,6 @@ public class StudentService {
         entity.setPhoneNumber(teacher.getPhoneNumber());
         entity.setTargetGrade(teacher.getTargetGrade());
         entity.setTeacher(true);
-        entity.setGem(teacher.isGem());
         return entity;
     }
 
@@ -380,7 +362,6 @@ public class StudentService {
         entity.setPhoneNumber(student.getPhoneNumber());
         entity.setTargetGrade(0); // default
         entity.setTeacher(false);
-        entity.setGem(student.isGem());
         return entity;
     }
 
@@ -394,7 +375,6 @@ public class StudentService {
         student.setGrade(entity.getGrade());
         student.setGroup(entity.isGroup());
         student.setPhoneNumber(entity.getPhoneNumber());
-        student.setGem(entity.isGem());
         return student;
     }
 
@@ -409,7 +389,6 @@ public class StudentService {
         teacher.setGroup(entity.isGroup());
         teacher.setPhoneNumber(entity.getPhoneNumber());
         teacher.setTargetGrade(entity.getTargetGrade());
-        teacher.setGem(entity.isGem());
         return teacher;
     }
 

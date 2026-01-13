@@ -92,7 +92,6 @@ type Student = {
     phoneNumber: String;
     group: boolean;
     teacher: boolean;
-    gem: boolean;
 };
 
 type Group = {
@@ -335,12 +334,7 @@ function loadWithout() {
             for (let i = 0; i < students.length; i++) {
                 const tmp = tableData[i];
                 tmp[1] = [
-                    '[' +
-                        (students[i].gem ? 'GS' : 'GY') +
-                        '] ' +
-                        students[i].name +
-                        ' ' +
-                        students[i].sureName,
+                    students[i].name + ' ' + students[i].sureName,
                     students[i].subject,
                 ];
                 tableData[i] = tmp;
@@ -349,12 +343,7 @@ function loadWithout() {
             for (let i = 0; i < teachers.length; i++) {
                 const tmp = tableData[i];
                 tmp[0] = [
-                    '[' +
-                        (teachers[i].gem ? 'GS' : 'GY') +
-                        '] ' +
-                        teachers[i].name +
-                        ' ' +
-                        teachers[i].sureName,
+                    teachers[i].name + ' ' + teachers[i].sureName,
                     teachers[i].subject,
                 ];
                 tableData[i] = tmp;
@@ -645,14 +634,7 @@ function loadStudentsForSubject(subject: string) {
 
             students.forEach((student: Student) => {
                 const option: edomElement = edom.newElement('option');
-                option.setText(
-                    student.name +
-                        ' ' +
-                        student.sureName +
-                        ' (' +
-                        (student.gem ? 'GS' : 'GY') +
-                        ')'
-                );
+                option.setText(student.name + ' ' + student.sureName);
                 (option.element as HTMLOptionElement).value =
                     student.id.toString();
 
@@ -687,14 +669,7 @@ function loadTeachersForSubject(subject: string) {
 
             teachers.forEach((student: Student) => {
                 const option: edomElement = edom.newElement('option');
-                option.setText(
-                    student.name +
-                        ' ' +
-                        student.sureName +
-                        ' (' +
-                        (student.gem ? 'GS' : 'GY') +
-                        ')'
-                );
+                option.setText(student.name + ' ' + student.sureName);
                 (option.element as HTMLOptionElement).value =
                     student.id.toString();
 

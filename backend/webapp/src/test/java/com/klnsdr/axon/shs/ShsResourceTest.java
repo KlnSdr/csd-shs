@@ -38,7 +38,6 @@ public class ShsResourceTest {
         dto.setGrade(10);
         dto.setGroup(true);
         dto.setPhoneNumber("1234567890");
-        dto.setGem(true);
 
         Student createdStudent = new Student();
         when(studentService.createStudent(any(Student.class))).thenReturn(createdStudent);
@@ -56,7 +55,6 @@ public class ShsResourceTest {
         assertEquals(dto.getGrade(), passedStudent.getGrade());
         assertEquals(dto.isGroup(), passedStudent.isGroup());
         assertEquals(dto.getPhoneNumber(), passedStudent.getPhoneNumber());
-        assertEquals(dto.isGem(), passedStudent.isGem());
 
         assertSame(createdStudent, result);
     }
@@ -72,7 +70,6 @@ public class ShsResourceTest {
         dto.setGroup(false);
         dto.setPhoneNumber("0987654321");
         dto.setTargetGrade(12);
-        dto.setGem(false);
 
         Teacher createdTeacher = new Teacher();
         when(studentService.createTeacher(any(Teacher.class))).thenReturn(createdTeacher);
@@ -91,7 +88,6 @@ public class ShsResourceTest {
         assertEquals(dto.isGroup(), passedTeacher.isGroup());
         assertEquals(dto.getPhoneNumber(), passedTeacher.getPhoneNumber());
         assertEquals(dto.getTargetGrade(), passedTeacher.getTargetGrade());
-        assertEquals(dto.isGem(), passedTeacher.isGem());
 
         assertSame(createdTeacher, result);
     }
