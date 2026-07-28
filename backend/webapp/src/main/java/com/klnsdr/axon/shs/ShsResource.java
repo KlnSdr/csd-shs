@@ -4,9 +4,11 @@ import com.klnsdr.axon.shs.entity.Student;
 import com.klnsdr.axon.shs.entity.Teacher;
 import com.klnsdr.axon.shs.service.ShsConfigService;
 import com.klnsdr.axon.shs.service.StudentService;
+import com.klnsdr.axon.shs.service.SubjectsService;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.TimeZone;
 
 @RestController
@@ -14,10 +16,12 @@ import java.util.TimeZone;
 public class ShsResource {
     private final StudentService studentService;
     private final ShsConfigService shsConfigService;
+    private final SubjectsService subjectsService;
 
-    public ShsResource(StudentService studentService, ShsConfigService shsConfigService) {
+    public ShsResource(StudentService studentService, ShsConfigService shsConfigService, SubjectsService subjectsService) {
         this.studentService = studentService;
         this.shsConfigService = shsConfigService;
+        this.subjectsService = subjectsService;
     }
 
     // TODO validate
@@ -37,5 +41,15 @@ public class ShsResource {
         final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         dateFormat.setTimeZone(TimeZone.getTimeZone("CET"));
         return dateFormat.format(shsConfigService.getEnrollEndDate());
+    }
+
+    @GetMapping("/subjects")
+    public List<String> getSubjects() {
+        return subjectsService.getSubjects();
+    }
+
+    @PutMapping("/subjects")
+    public void updateSubjects(@RequestBody List<String> subjects) {
+        subjectsService.updateSubjects(subjects);
     }
 }

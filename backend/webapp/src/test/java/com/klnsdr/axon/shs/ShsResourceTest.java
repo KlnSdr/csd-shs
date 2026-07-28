@@ -4,12 +4,14 @@ import com.klnsdr.axon.shs.entity.Student;
 import com.klnsdr.axon.shs.entity.Teacher;
 import com.klnsdr.axon.shs.service.ShsConfigService;
 import com.klnsdr.axon.shs.service.StudentService;
+import com.klnsdr.axon.shs.service.SubjectsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,13 +21,15 @@ import static org.mockito.Mockito.*;
 public class ShsResourceTest {
     private StudentService studentService;
     private ShsConfigService shsConfigService;
+    private SubjectsService subjectsService;
     private ShsResource shsResource;
 
     @BeforeEach
     void setUp() {
         studentService = mock(StudentService.class);
         shsConfigService = mock(ShsConfigService.class);
-        shsResource = new ShsResource(studentService, shsConfigService);
+        subjectsService = mock(SubjectsService.class);
+        shsResource = new ShsResource(studentService, shsConfigService, subjectsService);
     }
 
     @Test
@@ -104,5 +108,53 @@ public class ShsResourceTest {
         String expected = sdf.format(date);
 
         assertEquals(expected, result);
+    }
+
+    @Test
+    void getSubjects_shouldReturnSubjectsFromService() {
+        when(subjectsService.getSubjects()).thenReturn(List.of("Math", "Physics", "Chemistry"));
+
+        final List<String> result = shsResource.getSubjects();
+
+        assertEquals(List.of("Math", "Physics", "Chemistry"), result);
+        verify(subjectsService, times(1)).getSubjects();
+    }
+
+    @Test
+    void updateSubjects_shouldCallServiceWithProvidedSubjects() {
+        List<String> subjects = List.of("Math", "Physics", "Chemistry");
+
+        shsResource.updateSubjects(subjects);
+
+        verify(subjectsService, times(1)).updateSubjects(subjects);
+    }
+
+    @Test
+    void updateSubjects_shouldCallServiceWithEmptyList() {
+        List<String> emptySubjects = List.of();
+
+        shsResource.updateSubjects(emptySubjects);
+
+        verify(subjectsService, times(1)).updateSubjects(emptySubjects);
+    }
+
+    @Test
+    void updateSubjects_shouldCallServiceWithSingleSubject() {
+        List<String> singleSubject = List.of("Math");
+
+        shsResource.updateSubjects(singleSubject);
+
+        verify(subjectsService, times(1)).updateSubjects(singleSubject);
+    }
+
+    @Test
+    void updateSubjects_shouldPassExactSubjectsToService() {
+        List<String> subjects = List.of("Biology", "Chemistry", "History");
+        ArgumentCaptor<List<String>> captor = ArgumentCaptor.forClass(List.class);
+
+        shsResource.updateSubjects(subjects);
+
+        verify(subjectsService).updateSubjects(captor.capture());
+        assertEquals(subjects, captor.getValue());
     }
 }
