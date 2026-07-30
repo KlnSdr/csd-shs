@@ -24,10 +24,6 @@ function settingsUI() {
                 tag: 'div',
                 id: 'sectionSubjects',
             },
-            {
-                tag: 'h1',
-                text: 'Klassenstufen:',
-            },
         ],
         edom.findById('content')
     );
