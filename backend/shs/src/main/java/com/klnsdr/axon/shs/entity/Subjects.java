@@ -12,9 +12,14 @@ import java.util.List;
 @Entity
 public class Subjects {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id = 1L;
 
+    @ElementCollection
+    @CollectionTable(
+            name = "shs_subjects_entries",
+            joinColumns = @JoinColumn(name = "subjects_id")
+    )
+    @Column(name = "subject")
     private List<String> subjects;
 }

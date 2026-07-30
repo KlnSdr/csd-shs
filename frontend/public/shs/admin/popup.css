@@ -19,8 +19,12 @@
     margin-bottom: 5px;
 }
 
+.popupHeader h1 {
+    color: var(--background);
+}
+
 .popupHeader button {
-  background-color: var(--secondary-color);
+    background-color: var(--secondary-color);
 }
 
 .popupBody {

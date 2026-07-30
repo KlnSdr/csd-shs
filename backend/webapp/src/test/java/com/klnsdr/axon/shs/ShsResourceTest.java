@@ -119,42 +119,4 @@ public class ShsResourceTest {
         assertEquals(List.of("Math", "Physics", "Chemistry"), result);
         verify(subjectsService, times(1)).getSubjects();
     }
-
-    @Test
-    void updateSubjects_shouldCallServiceWithProvidedSubjects() {
-        List<String> subjects = List.of("Math", "Physics", "Chemistry");
-
-        shsResource.updateSubjects(subjects);
-
-        verify(subjectsService, times(1)).updateSubjects(subjects);
-    }
-
-    @Test
-    void updateSubjects_shouldCallServiceWithEmptyList() {
-        List<String> emptySubjects = List.of();
-
-        shsResource.updateSubjects(emptySubjects);
-
-        verify(subjectsService, times(1)).updateSubjects(emptySubjects);
-    }
-
-    @Test
-    void updateSubjects_shouldCallServiceWithSingleSubject() {
-        List<String> singleSubject = List.of("Math");
-
-        shsResource.updateSubjects(singleSubject);
-
-        verify(subjectsService, times(1)).updateSubjects(singleSubject);
-    }
-
-    @Test
-    void updateSubjects_shouldPassExactSubjectsToService() {
-        List<String> subjects = List.of("Biology", "Chemistry", "History");
-        ArgumentCaptor<List<String>> captor = ArgumentCaptor.forClass(List.class);
-
-        shsResource.updateSubjects(subjects);
-
-        verify(subjectsService).updateSubjects(captor.capture());
-        assertEquals(subjects, captor.getValue());
-    }
 }

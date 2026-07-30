@@ -47,9 +47,4 @@ public class ShsResource {
     public List<String> getSubjects() {
         return subjectsService.getSubjects();
     }
-
-    @PutMapping("/subjects")
-    public void updateSubjects(@RequestBody List<String> subjects) {
-        subjectsService.updateSubjects(subjects);
-    }
 }

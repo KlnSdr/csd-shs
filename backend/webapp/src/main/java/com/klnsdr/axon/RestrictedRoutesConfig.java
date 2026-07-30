@@ -37,6 +37,7 @@ public class RestrictedRoutesConfig {
                 .putNeedsPermission("/api/shs/admin/reset", WellKnownPermissions.SHS_ADMIN.getName())
                 .putNeedsPermission("/api/shs/admin/pairs/id/*/release", WellKnownPermissions.SHS_ADMIN.getName())
                 .putNeedsPermission("/api/shs/admin/end-date", WellKnownPermissions.SHS_ADMIN.getName())
+                .putNeedsPermission("/api/shs/admin/subjects", WellKnownPermissions.SHS_ADMIN.getName())
 
                 .getNeedsPermission("/api/permissions/user/*", WellKnownPermissions.DEVELOPER.getName())
                 .getNeedsPermission("/api/permissions/", WellKnownPermissions.DEVELOPER.getName())

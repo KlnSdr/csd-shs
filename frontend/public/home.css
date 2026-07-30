@@ -587,3 +587,19 @@ a {
 }
 
 /* ================================= Standard ================================= */
+
+.primaryButton {
+    width: unset;
+    margin-left: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    background-color: var(--primary-color);
+}
+
+.secondaryButton {
+    width: unset;
+    margin-left: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    background-color: var(--secondary-color);
+}

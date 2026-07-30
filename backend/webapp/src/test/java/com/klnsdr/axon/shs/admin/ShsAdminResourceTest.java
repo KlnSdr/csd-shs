@@ -10,8 +10,10 @@ import com.klnsdr.axon.shs.entity.analysis.legacy.Group;
 import com.klnsdr.axon.shs.service.AnalysisConfigService;
 import com.klnsdr.axon.shs.service.ShsConfigService;
 import com.klnsdr.axon.shs.service.StudentService;
+import com.klnsdr.axon.shs.service.SubjectsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +31,7 @@ public class ShsAdminResourceTest {
     private StudentService studentService;
     private AnalysisConfigService analysisConfigService;
     private ShsConfigService shsConfigService;
+    private SubjectsService subjectsService;
     private ShsAdminResource resource;
 
     @BeforeEach
@@ -36,7 +39,8 @@ public class ShsAdminResourceTest {
         studentService = mock(StudentService.class);
         analysisConfigService = mock(AnalysisConfigService.class);
         shsConfigService = mock(ShsConfigService.class);
-        resource = new ShsAdminResource(studentService, analysisConfigService, shsConfigService);
+        subjectsService = mock(SubjectsService.class);
+        resource = new ShsAdminResource(studentService, analysisConfigService, shsConfigService, subjectsService);
     }
 
     @Test
@@ -268,5 +272,43 @@ public class ShsAdminResourceTest {
         ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> resource.setEnrollEndDate(dto));
         assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
         assertEquals("invalid date", ex.getReason());
+    }
+
+    @Test
+    void updateSubjects_shouldCallServiceWithProvidedSubjects() {
+        List<String> subjects = List.of("Math", "Physics", "Chemistry");
+
+        resource.updateSubjects(subjects);
+
+        verify(subjectsService, times(1)).updateSubjects(subjects);
+    }
+
+    @Test
+    void updateSubjects_shouldCallServiceWithEmptyList() {
+        List<String> emptySubjects = List.of();
+
+        resource.updateSubjects(emptySubjects);
+
+        verify(subjectsService, times(1)).updateSubjects(emptySubjects);
+    }
+
+    @Test
+    void updateSubjects_shouldCallServiceWithSingleSubject() {
+        List<String> singleSubject = List.of("Math");
+
+        resource.updateSubjects(singleSubject);
+
+        verify(subjectsService, times(1)).updateSubjects(singleSubject);
+    }
+
+    @Test
+    void updateSubjects_shouldPassExactSubjectsToService() {
+        List<String> subjects = List.of("Biology", "Chemistry", "History");
+        ArgumentCaptor<List<String>> captor = ArgumentCaptor.forClass(List.class);
+
+        resource.updateSubjects(subjects);
+
+        verify(subjectsService).updateSubjects(captor.capture());
+        assertEquals(subjects, captor.getValue());
     }
 }

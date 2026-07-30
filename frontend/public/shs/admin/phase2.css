@@ -72,3 +72,7 @@ li {
 #selectStudentConnect {
     width: calc(100% - 10px) !important;
 }
+
+#sectionSubjects ul {
+  margin-left: 10px;
+}

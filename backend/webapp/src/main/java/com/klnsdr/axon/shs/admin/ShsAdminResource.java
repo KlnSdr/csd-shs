@@ -10,6 +10,7 @@ import com.klnsdr.axon.shs.entity.analysis.legacy.Group;
 import com.klnsdr.axon.shs.service.AnalysisConfigService;
 import com.klnsdr.axon.shs.service.ShsConfigService;
 import com.klnsdr.axon.shs.service.StudentService;
+import com.klnsdr.axon.shs.service.SubjectsService;
 import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,11 +25,13 @@ public class ShsAdminResource {
     private final StudentService studentService;
     private final AnalysisConfigService analysisConfigService;
     private final ShsConfigService shsConfigService;
+    private final SubjectsService subjectsService;
 
-    public ShsAdminResource(StudentService studentService, AnalysisConfigService analysisConfigService, ShsConfigService shsConfigService) {
+    public ShsAdminResource(StudentService studentService, AnalysisConfigService analysisConfigService, ShsConfigService shsConfigService, SubjectsService subjectsService) {
         this.studentService = studentService;
         this.analysisConfigService = analysisConfigService;
         this.shsConfigService = shsConfigService;
+        this.subjectsService = subjectsService;
     }
 
     @GetMapping("/students/count")
@@ -163,5 +166,10 @@ public class ShsAdminResource {
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
+    }
+
+    @PutMapping("/subjects")
+    public void updateSubjects(@RequestBody List<String> subjects) {
+        subjectsService.updateSubjects(subjects);
     }
 }
