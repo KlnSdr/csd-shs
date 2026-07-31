@@ -31,7 +31,7 @@ public class MenuServiceTest {
             new MenuItemEntity("Logout", "/api/users/logout")
     );
     private static final List<MenuItemEntity> devMenu = List.of(
-            new MenuItemEntity("Developer", "/dev"),
+            new MenuItemEntity("Admin", "/dev"),
             new MenuItemEntity("SHS Admin", "/shs/admin"),
             new MenuItemEntity("Logout", "/api/users/logout")
     );
